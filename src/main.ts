@@ -10,20 +10,20 @@ import zhTw from 'element-plus/dist/locale/zh-tw.mjs'
 import App from '@/App.vue'
 // svg插件需要配置代码
 import 'virtual:svg-icons-register'
-// import SvgIcon from '@/components/SvgIcon/index.vue'
+// 引入自定義插件對象: 註冊整個項目的全局組件
+import globalComponent from '@/components'
+// 引入模板的全局樣式
+import '@/styles/index.scss'
+// 引入路由進行註冊
+import router from './router'
 
 const app = createApp(App)
 app.use(ElementPlus, {
   locale: zhTw,
 })
-// 一般 組件全局掛載的方式，但問題是一次要掛載很多時這樣書寫沒有效率
-// app.component('SvgIcon', SvgIcon)
-// 引入自定義插件對象: 註冊整個項目的全局組件
-import globalComponent from '@/components'
+
 // 安裝自訂義插件
 app.use(globalComponent)
-
-// 引入模板的全局樣式
-import '@/styles/index.scss'
-
+// 註冊路由
+app.use(router)
 app.mount('#app')

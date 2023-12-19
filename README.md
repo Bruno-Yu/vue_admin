@@ -1,18 +1,78 @@
-# Vue 3 + TypeScript + Vite
+# Vue3 + Vite + TypeScript + Element plus + Pinia starter
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+> Vue 3 小專案開發模板 ( Vue3 + Vite + TypeScript + Element plus + Pinia ) Node18
 
-## Recommended IDE Setup
+## 使用技術 & 套件
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+1. Vue3
+2. Vite
+3. Node18
+4. Typescript
+5. Element plus
+6. Pinia
+7. scss, postcss, sass-loader
+8. vue-router
+9. axios
+10. mockjs, vite-plugin-mock
+11. vite-plugin-svg-icons
 
-## Type Support For `.vue` Imports in TS
+## 使用 lint 套件 & 風格規範
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+1. Prettier
+2. stylelint
+3. eslint (recommended)
+3. commitlint  搭配 husky 套件 ( 規範 commit 內容使用)
+4. scripts/preinstall.js ( 規範套件管理工具類型 )
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+## 集成
 
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+1. svg 集成
+2. scss 集成 ( 含 reset, 全域變數設置 )
+
+## 安裝指令
+
+```bash
+yarn
+```
+
+## 執行開發環境
+
+```bash
+yarn dev
+```
+
+## 建構開發環境
+
+```bash
+yarn build
+```
+
+## 建構測試環境
+
+```bash
+yarn build:test
+```
+
+## 建構生產環境
+
+```bash
+yarn build:pro
+```
+
+## 文件總覽
+
+```bash
+yarn preview
+```
+
+## src 內 lint 檢查
+
+```bash
+yarn lint
+```
+
+## src 內 lint 檢查並修復
+
+```bash
+yarn fix
+```
