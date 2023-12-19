@@ -2,7 +2,24 @@
 // 引入圖標組件
 import { Plus, Edit, Delete } from '@element-plus/icons-vue'
 import Test from '@/components/test.vue'
+// import request from '@/utils/request'
+import { onMounted } from 'vue'
+import { reqLogin } from './api/user'
 // import SvgIcon from '@/components/SvgIcon/index.vue'
+
+onMounted(() => {
+  // request({
+  //   url: '/user/login',
+  //   method: 'post',
+  //   data: {
+  //     username: 'admin',
+  //     password: '123456',
+  //   },
+  // }).then((res) => {
+  //   console.log(res)
+  // })
+  reqLogin({ username: 'admin', password: '123456' })
+})
 </script>
 
 <template>
@@ -13,7 +30,7 @@ import Test from '@/components/test.vue'
     <el-button type="danger" :icon="Delete">刪除按鈕</el-button>
     <hr />
     <div class="demo-pagination-block">
-      <div class="demonstration text-blue">Total item count</div>
+      <div class="demonstration text-color">Total item count</div>
       <el-pagination
         :page-size="100"
         layout="total, prev, pager, next"
@@ -25,11 +42,13 @@ import Test from '@/components/test.vue'
     <h2>SVG 測試</h2>
     <SvgIcon name="home" color="hotpink" width="30px" height="30px" />
     <Pagination />
+    <hr />
+    <h2>測試axios二次封裝</h2>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.text-blue {
-  color: blue;
+.text-color {
+  color: $color;
 }
 </style>

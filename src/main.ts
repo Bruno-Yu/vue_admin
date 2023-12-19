@@ -20,7 +20,10 @@ app.use(ElementPlus, {
 // app.component('SvgIcon', SvgIcon)
 // 引入自定義插件對象: 註冊整個項目的全局組件
 import globalComponent from '@/components'
-console.log(globalComponent)
 // 安裝自訂義插件
 app.use(globalComponent)
+
+// 引入模板的全局樣式
+import '@/styles/index.scss'
+
 app.mount('#app')
