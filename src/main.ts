@@ -16,6 +16,8 @@ import globalComponent from '@/components'
 import '@/styles/index.scss'
 // 引入路由進行註冊
 import router from './router'
+// 引入倉庫
+import store from './store'
 
 const app = createApp(App)
 app.use(ElementPlus, {
@@ -26,4 +28,5 @@ app.use(ElementPlus, {
 app.use(globalComponent)
 // 註冊路由
 app.use(router)
+app.use(store)
 app.mount('#app')

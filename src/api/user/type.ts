@@ -5,7 +5,8 @@ export interface loginForm {
   password: string
 }
 interface dataType {
-  token: string
+  token?: string
+  message?: string
 }
 
 // 登入 api response 的數據型別

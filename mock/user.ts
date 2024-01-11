@@ -8,8 +8,8 @@ function createUserList() {
         'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
       username: 'admin',
       password: '123456',
-      desc: '平台管理员',
-      roles: ['平台管理员'],
+      desc: '平台管理員',
+      roles: ['平台管理員'],
       buttons: ['cuser.detail'],
       routes: ['home'],
       token: 'Admin Token',
@@ -20,8 +20,8 @@ function createUserList() {
         'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
       username: 'system',
       password: '123456',
-      desc: '系统管理员',
-      roles: ['系统管理员'],
+      desc: '系統管理員',
+      roles: ['系統管理員'],
       buttons: ['cuser.detail', 'cuser.user'],
       routes: ['home'],
       token: 'System Token',
@@ -46,7 +46,7 @@ export default [
       )
       //没有用户返回失败信息
       if (!checkUser) {
-        return { code: 201, data: { message: '账号或者密码不正确' } }
+        return { code: 201, data: { message: '帳號或者密碼不正確' } }
       }
       //如果有返回成功信息
       const { token } = checkUser
@@ -64,7 +64,7 @@ export default [
       const checkUser = createUserList().find((item) => item.token === token)
       //没有返回失败的信息
       if (!checkUser) {
-        return { code: 201, data: { message: '获取用户信息失败' } }
+        return { code: 201, data: { message: '獲取用戶信息失敗' } }
       }
       //如果有返回成功信息
       return { code: 200, data: { checkUser } }

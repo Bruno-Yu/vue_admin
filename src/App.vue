@@ -9,7 +9,6 @@ onMounted(() => {
 
 <template>
   <div>
-    <h1 class="text-title">Vue starter 小專案模板</h1>
     <router-view></router-view>
   </div>
 </template>
@@ -18,6 +17,7 @@ onMounted(() => {
 .text-title {
   font-size: 3rem;
   font-weight: bold;
-  color: $color;
+
+  // color: $color;
 }
 </style>
