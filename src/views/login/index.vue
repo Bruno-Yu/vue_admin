@@ -3,7 +3,12 @@
     <el-row>
       <el-col :span="12" :xs="0"></el-col>
       <el-col :span="12" :xs="24">
-        <el-form class="login_form" :model="loginForm" :rules="rules">
+        <el-form
+          class="login_form"
+          :model="loginForm"
+          :rules="rules"
+          ref="loginForms"
+        >
           <h1>Hello</h1>
           <h2>歡迎來到萬點練習</h2>
           <el-form-item prop="username">
@@ -52,10 +57,27 @@ const userStore = useUserStore()
 const $router = useRouter()
 // 控制按鈕 loading 加載效果
 const loading = ref(false)
-
+// 獲取表單 DOM
+const loginForms = ref()
 // 蒐集帳號與密碼的數據
 const loginForm = reactive({ username: 'admin', password: '123456' })
+// 自定義校驗函數
+const validatorUserName = (rule: any, value: any, callback: any) => {
+  // rule 即為校驗規則對象
+  // value 即為表單元素的文本內容
+  // callback: 函式，若符合條件使用 callback 放行 ; 若不通過則同樣使用 callback 但注入錯誤信息
+  // /^\d{5,10}/.test(value)
+  if (value.length >= 5) {
+    callback()
+  } else {
+    callback(new Error('帳號長度至少五位'))
+  }
+}
 const login = async () => {
+  console.log('loginForms', loginForms.value)
+  //  form validate 接收一個回調函數，或是回傳一個 promise ( 若通過 fulfilled 若沒通過 rejected )
+  // 若沒通過校正則會回傳 rejected 的 promised error 就不會再往下走了
+  await loginForms.value.validate()
   // 按鈕加載效果開始
   loading.value = true
   // 請求成功轉往首頁展示數據
@@ -90,17 +112,28 @@ const login = async () => {
   // 筆者推測:不放在 finally 內部也一樣會先 false 後再轉頁
   //   loading.value = false
   // }
-  // 定義表單校正需要用到的配置對象
-  const rules = {
-    username: [
-      {
-        required: true,
-        message: '用戶名不得為空',
-        trigger: 'blur',
-      },
-    ],
-    password: [],
-  }
+}
+
+// 定義表單校正需要用到的配置對象
+// rules 在這邊是定義死的，所以不用用響應的 reactive 或是 ref
+const rules = {
+  username: [
+    {
+      required: true, // 必要校驗
+      validator: validatorUserName,
+      max: 10, // 文本最大長度
+      trigger: 'change', // 觸發表單驗證的時機 change 改變輸入內容 blur 失去焦點
+    },
+  ],
+  password: [
+    {
+      required: true, // 必要校驗
+      min: 6, //  文本最小長度
+      max: 15, // 文本最大長度
+      message: '密碼長度至少六位', // 錯誤提示信息
+      trigger: 'change', // 觸發表單驗證的時機 change 改變輸入內容 blur 失去焦點
+    },
+  ],
 }
 </script>
 

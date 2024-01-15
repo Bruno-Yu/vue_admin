@@ -10,8 +10,8 @@ export const constantRoute = [
   {
     // 登入成功後的 dashboard
     path: '/',
-    component: () => import('@/views/home/index.vue'),
-    name: 'home', //命名路由
+    component: () => import('@/layout/index.vue'),
+    name: 'layout', //命名路由
   },
   {
     // 404
