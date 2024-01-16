@@ -4,6 +4,8 @@ import { defineStore } from 'pinia'
 import { reqLogin } from '@/api/user'
 //   引入 localStorage 存取方法
 import { SET_TOKEN, GET_TOKEN } from '@/utils/token'
+// 引入路由(常量路由)
+import { constantRoute } from '@/router/routes'
 // 引入數據類型
 import type { loginForm, loginResponseData } from '@/api/user/type'
 import type { UserState } from './types/type'
@@ -12,6 +14,7 @@ const useUserStore = defineStore('User', {
   state: (): UserState => {
     return {
       token: GET_TOKEN(), // 存儲用戶登入成功的 token,若尚無則會是 null 值
+      menuRoutes: constantRoute, // 倉庫存儲生成菜單需要的數組(路由)
     }
   },
   actions: {
