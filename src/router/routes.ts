@@ -19,9 +19,9 @@ export const constantRoute = [
     name: 'layout', //命名路由
     redirect: '/home',
     meta: {
-      title: 'layout',
+      title: '', // 由於希望在 breadcrumb 用 v-show 判斷是否顯示，不顯示以空字串呈現
       hidden: false,
-      icon: 'Avatar',
+      icon: '',
     },
     children: [
       {

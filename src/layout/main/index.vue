@@ -8,6 +8,11 @@
   </router-view>
 </template>
 <script lang="ts" setup></script>
+<script lang="ts">
+export default {
+  name: 'main',
+}
+</script>
 <style lang="scss" scoped>
 // transition vue3 類名樣式修改
 .fade-enter-from {
