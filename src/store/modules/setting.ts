@@ -5,6 +5,7 @@ const useLayoutSettingStore = defineStore('SettingStore', {
   state: () => {
     return {
       fold: false, // 用戶控制左側菜單是否摺疊的狀態
+      refresh: false, // 用戶控制工具列刷新按鈕的狀態
     }
   },
 })
