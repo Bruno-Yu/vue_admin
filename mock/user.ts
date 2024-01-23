@@ -33,18 +33,18 @@ function createUserList() {
 // 登入假的 api 接口
 // 獲取用戶信息的假的 api 接口
 export default [
-  // 用户登录接口
+  // 用户登錄接口
   {
-    url: '/api/user/login', //请求地址
-    method: 'post', //请求方式
+    url: '/api/user/login', //請求地址
+    method: 'post', //請求方式
     response: ({ body }) => {
-      //获取请求体携带过来的用户名与密码
+      // 獲取 request body 所攜帶過來的用戶 & 密碼
       const { username, password } = body
-      //调用获取用户信息函数,用于判断是否有此用户
+      // 確認使否有此用戶
       const checkUser = createUserList().find(
         (item) => item.username === username && item.password === password,
       )
-      //没有用户返回失败信息
+      //没有該用户則返回失敗信息
       if (!checkUser) {
         return { code: 201, data: { message: '帳號或者密碼不正確' } }
       }
@@ -53,16 +53,16 @@ export default [
       return { code: 200, data: { token } }
     },
   },
-  // 获取用户信息
+  // 獲取用户信息
   {
     url: '/api/user/info',
     method: 'get',
     response: (request) => {
-      //获取请求 Header 携带token
+      //獲取 request Header 所攜帶token
       const token = request.headers.token
-      //查看用户信息是否包含有次token用户
+      //查看用户信息是否包含此次token用户
       const checkUser = createUserList().find((item) => item.token === token)
-      //没有返回失败的信息
+      //若没有則返回失敗的信息
       if (!checkUser) {
         return { code: 201, data: { message: '獲取用戶信息失敗' } }
       }

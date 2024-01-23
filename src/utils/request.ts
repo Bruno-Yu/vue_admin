@@ -1,7 +1,8 @@
 // 二次封装 axios: 使用請求與響應式攔截器
 import axios from 'axios'
 import { ElMessage } from 'element-plus' // element 中用來呈現 api 訊息的組件
-// import useUserStore from '@/store/modules/user'
+// 引入 user store
+import useUserStore from '@/store/modules/user'
 // 第一步: 利用 axios 對象的 create 方法，去創建 axios 實例對象
 // 如此可方便些功能配置 ex: 基礎路徑、是否有超時
 const request = axios.create({
@@ -14,13 +15,14 @@ const request = axios.create({
 // request.interceptors.request.use((config)=>{return config})
 request.interceptors.request.use(
   (config) => {
+    // 獲取 store 中儲存的 token 並在登入後且發 request 時，同時將 token 帶給 server
     // 使用配置對象 config
-    // let userStore = useUserStore()
-
-    //if (userStore.token) {
-    // config 的 headers 屬性，通常給伺服器的公共參數可在這設置
-    //config.headers.token = userStore.token
-    //}
+    const userStore = useUserStore()
+    console.log('userStore.token', userStore.token)
+    if (userStore.token) {
+      // config 的 headers 屬性，通常給伺服器的公共參數可在這設置
+      config.headers.token = userStore.token
+    }
 
     return config // 必須記得要 return config 回來，否則可能請求連發都發不出去
   },

@@ -153,7 +153,6 @@ export const constantRoute = [
       hidden: true,
       icon: 'Remove',
     },
-    
   },
   {
     // 任意路由

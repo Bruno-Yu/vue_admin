@@ -1,7 +1,7 @@
 // 創建記錄用戶行為的小倉庫
 import { defineStore } from 'pinia'
 // 引入 api 包裝的方法
-import { reqLogin } from '@/api/user'
+import { reqLogin, reqUserInfo } from '@/api/user'
 //   引入 localStorage 存取方法
 import { SET_TOKEN, GET_TOKEN } from '@/utils/token'
 // 引入路由(常量路由)
@@ -15,6 +15,8 @@ const useUserStore = defineStore('User', {
     return {
       token: GET_TOKEN(), // 存儲用戶登入成功的 token,若尚無則會是 null 值
       menuRoutes: constantRoute, // 倉庫存儲生成菜單需要的數組(路由)
+      username: '',
+      avatar: '',
     }
   },
   actions: {
@@ -37,6 +39,20 @@ const useUserStore = defineStore('User', {
         // 使用 Promise.reject 會走 catch 路線
         return Promise.reject(new Error(result.data.message))
       }
+    },
+    // 獲取用戶訊息的方法
+    async userInfo() {
+      // 獲取用戶信息用以進行用戶基本信息存儲於倉庫中 (用戶頭像、姓名)
+      // 若沒有在 request 的 header 上帶對應使用者的 token 則會獲取失敗 ( 201 )
+      // 可以透過 request.interceptor 來帶請求 ( 發出請求前先帶上 )
+      const result = await reqUserInfo()
+      // 如果獲取用戶信息成功則存儲用戶信息
+      if(result.code === 200){
+        this.username =  result.data.checkUser.username
+        this.avatar = result.data.checkUser.avatar
+      } else {
+      }
+      console.log('result', result)
     },
   },
   getters: {},
