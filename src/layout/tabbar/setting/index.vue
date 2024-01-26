@@ -47,11 +47,11 @@ const triggerFullScreen = () => {
     document.exitFullscreen()
   }
 }
-const logout = () => {
+const logout = async () => {
   //  1. 需要向服務器發請求 ( 登出 api )
   //     登出同等於告知 server 本次 token 以無效
   //  2. 也需要將 pinia 內存取的數據清空 ( token, username, avatar )
-  userStore.userLogout()
+  await userStore.userLogout()
   //  3. 跳轉道登入頁面
   //  4. 使用 路由 query 確保登出重新登入後，頁面會與登出前一致
   $router.push({ path: '/login', query: { redirect: $route.path } })

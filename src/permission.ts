@@ -51,7 +51,7 @@ router.beforeEach(async (to: any, from: any, next: any) => {
           // 情境二: 用戶手動修改本地存儲 token
           // 邏輯: 應讓用戶登出並回到登入頁面
           // 需要將 pinia 內存取的數據清空 ( token, username, avatar )
-          userStore.userLogout()
+          await userStore.userLogout()
           next({ path: '/login', query: { redirect: to.path } })
         }
       }

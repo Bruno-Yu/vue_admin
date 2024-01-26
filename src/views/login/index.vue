@@ -61,7 +61,7 @@ const loading = ref(false)
 // 獲取表單 DOM
 const loginForms = ref()
 // 蒐集帳號與密碼的數據
-const loginForm = reactive({ username: 'admin', password: '123456' })
+const loginForm = reactive({ username: 'admin', password: 'atguigu123' })
 // 自定義校驗函數
 const validatorUserName = (rule: any, value: any, callback: any) => {
   // rule 即為校驗規則對象
