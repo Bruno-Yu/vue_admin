@@ -2,8 +2,8 @@
 import { defineStore } from 'pinia'
 // 引入 api 包裝的方法
 import { reqLogin, reqUserInfo } from '@/api/user'
-//   引入 localStorage 存取方法
-import { SET_TOKEN, GET_TOKEN } from '@/utils/token'
+//   引入 localStorage 互動的方法
+import { SET_TOKEN, GET_TOKEN, REMOVE_TOKEN } from '@/utils/token'
 // 引入路由(常量路由)
 import { constantRoute } from '@/router/routes'
 // 引入數據類型
@@ -47,12 +47,22 @@ const useUserStore = defineStore('User', {
       // 可以透過 request.interceptor 來帶請求 ( 發出請求前先帶上 )
       const result = await reqUserInfo()
       // 如果獲取用戶信息成功則存儲用戶信息
-      if(result.code === 200){
-        this.username =  result.data.checkUser.username
+      if (result.code === 200) {
+        this.username = result.data.checkUser.username
         this.avatar = result.data.checkUser.avatar
+        return 'success'
       } else {
+        return Promise.reject('獲取用戶信息失敗')
       }
-      console.log('result', result)
+    },
+    // 用戶登出
+    userLogout() {
+      // mock api 邏輯: 退出登入 api , 通知伺服器本地用戶唯一標識失效
+      this.token = ''
+      this.username = ''
+      this.avatar = ''
+      // 刪除本地 token
+      REMOVE_TOKEN()
     },
   },
   getters: {},

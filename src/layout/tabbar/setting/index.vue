@@ -13,19 +13,21 @@
     </span>
     <template #dropdown>
       <el-dropdown-menu>
-        <el-dropdown-item>退出登入</el-dropdown-item>
+        <el-dropdown-item @click="logout">退出登入</el-dropdown-item>
       </el-dropdown-menu>
     </template>
   </el-dropdown>
 </template>
 <script lang="ts" setup>
+import { useRouter, useRoute } from 'vue-router'
 // 獲取用戶資訊
-import useUserStore from '@/store/modules/user';
+import useUserStore from '@/store/modules/user'
 import useLayOutSettingStore from '@/store/modules/setting'
 const LayOutSettingStore = useLayOutSettingStore()
 
+const $router = useRouter()
+const $route = useRoute()
 const userStore = useUserStore()
-
 
 // 刷新方法
 const triggerRefresh = () => {
@@ -44,6 +46,15 @@ const triggerFullScreen = () => {
     // 退出全屏模式
     document.exitFullscreen()
   }
+}
+const logout = () => {
+  //  1. 需要向服務器發請求 ( 登出 api )
+  //     登出同等於告知 server 本次 token 以無效
+  //  2. 也需要將 pinia 內存取的數據清空 ( token, username, avatar )
+  userStore.userLogout()
+  //  3. 跳轉道登入頁面
+  //  4. 使用 路由 query 確保登出重新登入後，頁面會與登出前一致
+  $router.push({ path: '/login', query: { redirect: $route.path } })
 }
 </script>
 <script lang="ts">

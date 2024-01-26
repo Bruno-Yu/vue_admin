@@ -1,7 +1,7 @@
 <template>
   <div class="layout_container">
     <!-- 左側菜單 -->
-    <div class="layout_slider" :class="{ fold: LayoutSettingStore.fold }">
+    <div class="layout_slider">
       <Logo />
       <!-- 展示菜單 -->
       <!-- 滾動組件 -->
@@ -14,6 +14,7 @@
           text-color="white"
           :collapse="LayoutSettingStore.fold"
         >
+          <!-- :collapse="LayoutSettingStore.fold" -->
           <!-- 根據路由動態生成菜單 -->
           <Menu :menuList="userStore.menuRoutes" />
         </el-menu>

@@ -48,13 +48,14 @@
 import { User, Lock } from '@element-plus/icons-vue'
 import { reactive, ref } from 'vue'
 import useUserStore from '@/store/modules/user'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 // element ui 的 toast 也就是 提示小彈窗 跟 message 功能類似，樣式不同
 import { ElNotification } from 'element-plus'
 import { getTime } from '@/utils/time'
 
 const userStore = useUserStore()
 const $router = useRouter()
+const $route = useRoute()
 // 控制按鈕 loading 加載效果
 const loading = ref(false)
 // 獲取表單 DOM
@@ -74,7 +75,6 @@ const validatorUserName = (rule: any, value: any, callback: any) => {
   }
 }
 const login = async () => {
-  console.log('loginForms', loginForms.value)
   //  form validate 接收一個回調函數，或是回傳一個 promise ( 若通過 fulfilled 若沒通過 rejected )
   // 若沒通過校正則會回傳 rejected 的 promised error 就不會再往下走了
   await loginForms.value.validate()
@@ -90,7 +90,9 @@ const login = async () => {
   try {
     // 保證登入成功
     await userStore.userLogin(loginForm)
-    $router.push('/')
+    // 做判斷 若當前路由有 query 則依照 query 的路徑推，若無則以首頁路徑'/' 推
+    const redirect: any = $route.query.redirect
+    $router.push({ path: redirect || '/' })
     ElNotification({
       type: 'success',
       message: '登入成功',

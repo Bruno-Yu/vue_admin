@@ -29,6 +29,11 @@
 1. svg 集成
 2. scss 集成 ( 含 reset, 全域變數設置 )
 
+## api 資源
+服務器域名: http://sph-api.atguigu.cn
+swagger文檔: http://39.98.123.211:8510/swagger-ui.html#/
+
+
 ## 安裝指令
 
 ```bash

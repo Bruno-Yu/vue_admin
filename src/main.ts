@@ -18,6 +18,8 @@ import '@/styles/index.scss'
 import router from './router'
 // 引入倉庫
 import store from './store'
+// 引入自訂的 middleware
+import './permission'
 
 const app = createApp(App)
 app.use(ElementPlus, {
