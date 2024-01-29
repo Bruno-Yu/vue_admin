@@ -127,7 +127,7 @@ import { ref, onMounted, reactive, nextTick } from 'vue'
 import {
   reqHasTrademark,
   reqAddOrUpdateTrademark,
-  reqDeleteTrademark
+  reqDeleteTrademark,
 } from '@/api/product/trademark'
 import type {
   Records,
@@ -247,9 +247,25 @@ const updateTrademark = (row) => {
 }
 
 // 刪除品牌按鈕
-const deleteTrademark = (id:number) => {
+const deleteTrademark = async (id: number) => {
   // dialogFormVisible.value = true
-  reqDeleteTrademark(id)
+  const result = await reqDeleteTrademark(id)
+  if (result.code === 200) {
+    ElMessage({
+      type: 'success',
+      message: '刪除品牌成功',
+    })
+    // 需要刷新頁面上所有項目，所以必須再次發請求
+    // 確認目前頁面數量是否 > 1 若是則留在當前頁面，反之則回到上個頁面
+    getHasTrademark(
+      trademarkData.value.length > 1 ? pageNo.value : pageNo.value - 1,
+    )
+  } else {
+    ElMessage({
+      type: 'error',
+      message: '刪除品牌失敗',
+    })
+  }
 }
 
 // dialog 取消按鈕
