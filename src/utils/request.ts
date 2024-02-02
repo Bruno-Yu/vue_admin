@@ -36,8 +36,9 @@ request.interceptors.request.use(
 // request.interceptors.response.use((repsone)=>{}, (error)=>{})
 request.interceptors.response.use(
   (response) => {
+    console.log('response', response)
     // 解析 & 簡化數據
-    if (response.status === 200) {
+    if (response?.status === 200) {
       return Promise.resolve(response.data)
     } else {
       return Promise.reject(response.data)
@@ -48,7 +49,7 @@ request.interceptors.response.use(
     // 定一個變量用來存儲網路錯誤的信息
     let message = ''
     // http 狀態碼
-    const status = error.response.status
+    const status = error.response?.status
     switch (status) {
       // 401 token 過期
       case 401:

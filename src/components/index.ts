@@ -1,11 +1,17 @@
 // 註冊成全域組件的方式
 import SvgIcon from './SvgIcon/index.vue'
 import Pagination from './Pagination/index.vue'
+import Category from './Category/index.vue'
 // 引入 element-plus 提供的全部圖標組件
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 // 整成一個對象
-const allGlobalComponent = { SvgIcon, Pagination, ElementPlusIconsVue }
+const allGlobalComponent = {
+  SvgIcon,
+  Pagination,
+  ElementPlusIconsVue,
+  Category,
+}
 //  對外曝露插件對象
 export default {
   // 必須要叫 install

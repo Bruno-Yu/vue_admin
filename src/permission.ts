@@ -39,33 +39,35 @@ router.beforeEach(async (to: any, from: any, next: any) => {
     } else {
       // 排除登入頁面，但當 reload 時，因為 localStorage 只存 token 沒有用戶信息，所以會消失
       // 判斷是否有用戶信息
-      if (username) {
-        next()
-      } else {
-        // 若有 token 但沒有用戶信息，則在 middleware 這邊發出獲取用戶信息的請求後再放行
-        try {
-          await userStore.userInfo()
-          next()
-        } catch (error) {
-          // 情境一: token 過期導致獲取不到用戶信息
-          // 情境二: 用戶手動修改本地存儲 token
-          // 邏輯: 應讓用戶登出並回到登入頁面
-          // 需要將 pinia 內存取的數據清空 ( token, username, avatar )
-          await userStore.userLogout()
-          next({ path: '/login', query: { redirect: to.path } })
-        }
-      }
+      // if (username) {
+      //   next()
+      // } else {
+      //   // 若有 token 但沒有用戶信息，則在 middleware 這邊發出獲取用戶信息的請求後再放行
+      //   try {
+      //     await userStore.userInfo()
+      //     next()
+      //   } catch (error) {
+      //     // 情境一: token 過期導致獲取不到用戶信息
+      //     // 情境二: 用戶手動修改本地存儲 token
+      //     // 邏輯: 應讓用戶登出並回到登入頁面
+      //     // 需要將 pinia 內存取的數據清空 ( token, username, avatar )
+      //     await userStore.userLogout()
+      //     next({ path: '/login', query: { redirect: to.path } })
+      //   }
+      // }
+      next()
     }
   } else {
     // 未登入
     // 用戶未登入的判斷，只能在 login 頁
-    if (to.path === '/login') {
-      next()
-    } else {
-      // 若不是登入頁都轉往登入頁
-      // 增加邏輯是，存取用戶原想去的路由，以利用戶登入時直接導向
-      next({ path: '/login', query: { redirect: to.path } })
-    }
+    next()
+    // if (to.path === '/login') {
+    //   next()
+    // } else {
+    //   // 若不是登入頁都轉往登入頁
+    //   // 增加邏輯是，存取用戶原想去的路由，以利用戶登入時直接導向
+    //   next({ path: '/login', query: { redirect: to.path } })
+    // }
   }
   next()
 })
