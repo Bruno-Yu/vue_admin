@@ -36,7 +36,6 @@ request.interceptors.request.use(
 // request.interceptors.response.use((repsone)=>{}, (error)=>{})
 request.interceptors.response.use(
   (response) => {
-    console.log('response', response)
     // 解析 & 簡化數據
     if (response?.status === 200) {
       return Promise.resolve(response.data)

@@ -1,6 +1,6 @@
 // 屬性相關的 API 邏輯
 import request from '@/utils/request'
-import type { CategoryResponseData, AttrResponseData } from './type'
+import type { CategoryResponseData, AttrResponseData, AttrData } from './type'
 
 // 獲取屬性管理模塊的 api
 enum API {
@@ -12,6 +12,10 @@ enum API {
   C3_URL = '/admin/product/getCategory3/',
   // 獲取在有一級二級以及三級 id 的屬性數值
   ATTR_URL = '/admin/product/attrInfoList/',
+  // 新增或修改屬性 api
+  ADD_OR_UPDATE_URL = '/admin/product/saveAttrInfo',
+  // 刪除某一屬性 api
+  DELETE_ATTR_URL = '/admin/product/deleteAttr/',
 }
 
 // 獲取一級分類的 API
@@ -31,3 +35,9 @@ export const reqAttr = (
   request.get<any, AttrResponseData>(
     API.ATTR_URL + `${category1Id}/${category2Id}/${category3Id}`,
   )
+// 新增或修改屬性 api
+export const reqAddOrUpdateAttr = (data: AttrData) =>
+  request.post<any, any>(API.ADD_OR_UPDATE_URL, data)
+// 刪除某一屬性
+export const reqDeleteAttr = (id: number) =>
+  request.delete<any, any>(API.DELETE_ATTR_URL + id)

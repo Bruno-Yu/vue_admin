@@ -4,7 +4,11 @@
     <el-card>
       <el-form :inline="true">
         <el-form-item label="一級分類">
-          <el-select v-model="categoryStore.c1Id" @change="categoryStore.getC2">
+          <el-select
+            :disabled="!!scene"
+            v-model="categoryStore.c1Id"
+            @change="categoryStore.getC2"
+          >
             <!-- option label 為顯示的數據; value 則為 select 所選定的數據 -->
             <el-option
               v-for="c1 in categoryStore.c1Arr"
@@ -15,7 +19,11 @@
           </el-select>
         </el-form-item>
         <el-form-item label="二級分類">
-          <el-select v-model="categoryStore.c2Id" @change="categoryStore.getC3">
+          <el-select
+            :disabled="!!scene"
+            v-model="categoryStore.c2Id"
+            @change="categoryStore.getC3"
+          >
             <el-option
               v-for="c2 in categoryStore.c2Arr"
               :key="c2.id"
@@ -25,7 +33,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="三級分類">
-          <el-select v-model="categoryStore.c3Id">
+          <el-select :disabled="!!scene" v-model="categoryStore.c3Id">
             <el-option
               v-for="c3 in categoryStore.c3Arr"
               :key="c3.id"
@@ -47,6 +55,8 @@ export default {
 import { onMounted } from 'vue'
 import useCategoryStore from '@/store/modules/category'
 // import { reqC1, reqC2, reqC3 } from '@/api/product/attr/index.ts'
+
+defineProps(['scene'])
 
 const categoryStore = useCategoryStore()
 // const c1Arr = ref([])

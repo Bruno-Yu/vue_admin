@@ -17,16 +17,17 @@ export interface CategoryResponseData extends ResponseData {
 }
 
 export interface AttrValueData {
-  id: number | string
+  id?: number | string
   valueName: string
-  attrId: number
+  attrId?: number
+  isEditing?: boolean
 }
 
 export interface AttrData {
-  id: number | string
+  id?: number | string
   attrName: string
-  categoryId: number
-  categoryLevel: number
+  categoryId: number | string
+  categoryLevel: number | string
   attrValueList: AttrValueData[]
 }
 
