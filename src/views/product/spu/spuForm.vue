@@ -160,7 +160,6 @@ const $emit = defineEmits(['changeScene'])
 // 點擊取消，通知父組件切換場景
 const cancel = () => {
   $emit('changeScene', { sceneNo: 0, action: 'cancel' })
-  clearAllSpuData()
 }
 // 存取此頁展示的 SPU 全部內容
 const spuData = ref<SpuData>({
