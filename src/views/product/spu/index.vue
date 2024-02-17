@@ -121,14 +121,28 @@ const addOrEditSPUScene = (
 ) => {
   scene.value = 1
   if (!isAdd) {
+    // 更新
     // 調用子組件的方法獲取 api 資料
     spuForm.value.initHasSpuData(row)
+  } else {
+    // 新增則不傳入已有的資料 row 但要傳入 c3Id
+    spuForm.value.initHasSpuData(undefined, categoryStore.c3Id)
   }
 }
 
 // changeScene 讓子組件通知父組件切換 scene 所用
-const changeScene = (EmitScene: number) => {
-  scene.value = EmitScene
+const changeScene = (EmitScene: { sceneNo: number; action: string }) => {
+  const { sceneNo, action } = EmitScene
+  scene.value = sceneNo
+  // 確認是否有三級分類 id
+  if (categoryStore.c3Id) {
+    // 如果更新 & 取消就留在當前頁面(預設)，如果是新增就留在第一頁
+    if (action === 'add') {
+      getHasSpu(1)
+    } else {
+      getHasSpu(pageNo.value)
+    }
+  }
 }
 
 // 監聽三級分類 id 的變化
