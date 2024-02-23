@@ -7,6 +7,8 @@ import type {
   SaleAttrResponseData,
   HasSaleAttrResponseData,
   SpuData,
+  SkuData,
+  SkuInfoData,
 } from './type'
 
 enum API {
@@ -24,6 +26,12 @@ enum API {
   ADDSPU_URL = '/admin/product/saveSpuInfo',
   // 編輯/更新原有 SPU
   UPDATESPU_URL = '/admin/product/updateSpuInfo',
+  // 新增 SKU 內容
+  ADDSKU_URL = '/admin/product/saveSkuInfo',
+  // 檢視該 SPU 下所有的 SKU (該 SPU 下所有的商品)
+  SKUINFO_URL = '/admin/product/findBySpuId/',
+  // 刪除該 SPU
+  DELETESPU_URL = '/admin/product/deleteSpu/',
 }
 
 // 獲取三級分類下已有的 SPU 數據
@@ -61,3 +69,12 @@ export const reqAddOrUpdateSpu = (data: SpuData) => {
     return request.post<any, any>(API.ADDSPU_URL, data)
   }
 }
+// 新增 SKU 內容
+export const reqAddSku = (data: SkuData) =>
+  request.post<any, any>(API.ADDSKU_URL, data)
+// 檢視該 SPU 下所有的 SKU (該 SPU 下所有的商品)
+export const reqSkuInfo = (spuId: number | string) =>
+  request.get<any, SkuInfoData>(API.SKUINFO_URL + spuId)
+// 刪除該 SPU
+export const reqDeleteSpu = (spuId: number | string) =>
+  request.delete<any, any>(API.DELETESPU_URL + spuId)

@@ -46,7 +46,7 @@
             </el-button>
 
             <el-popconfirm
-              :title="`您確定要刪掉 ${row.valueName}屬性嗎?`"
+              :title="`您確定要刪掉 ${row.valueName}嗎?`"
               icon="Delete"
               icon-color="#f56c6c"
               width="250px"
@@ -140,7 +140,7 @@ import type {
   AttrValueData,
 } from '@/api/product/attr/type'
 const categoryStore = useCategoryStore()
-const attrData = ref<AttrData>([])
+const attrData = ref<AttrData[]>([])
 
 const getAttr = async () => {
   if (categoryStore.c3Id) {

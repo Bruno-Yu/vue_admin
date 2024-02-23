@@ -85,6 +85,7 @@ export interface saleAttr {
   spuSaleAttrValueList: spuSaleAttrValueList
   inputActive?: boolean // 在 SPU 新增 tag 所需，作為辨別是否顯示編輯欄框的引用樣式
   saleAttrValue?: string // 在 SPU 新增 tag 所需，做為暫存使用者新輸入的屬性值所用
+  saleAttrIdAndSaleAttrValueId?: string | undefined // 用於在 SPU/skuForm 存取個別屬性所選擇的值
 }
 
 // 定義 GET 該 SPU 銷售屬性物件回傳資料類型
@@ -101,4 +102,54 @@ export interface HasSaleAttr {
 // GET 已有全部SPU的銷售屬性
 export interface HasSaleAttrResponseData extends ResponseData {
   data: HasSaleAttr[]
+}
+
+//  sku 的個別平台屬性
+export interface skuAttrValue {
+  attrId: string | number // 平台屬性 id
+  valueId: string | number // 平台屬性值 id
+  attrName?: string
+  id?: number
+  skuId?: number
+  valueName?: string
+}
+
+export interface skuImage {
+  id: number
+  imgName: string
+  imgUrl: string
+  isDefault: string
+  skuId: number
+  spuImgId: number
+}
+
+export interface skuSaleAttrValue {
+  saleAttrId: string | number // 銷售屬性 id
+  saleAttrValueId: string | number // 銷售屬性值 id
+  id?: number
+  saleAttrName?: string
+  saleAttrValueName?: string
+  skuId?: number
+  spuId?: number
+}
+// 新增 SKU API 的 payload
+export interface SkuData {
+  createTime?: string
+  id?: number
+  category3Id: string | number // 三級分類 id
+  spuId: string | number // 該 spu Id
+  tmId: string | number // 該 spu 的品牌 id
+  skuName: string // sku 名稱
+  price: string | number // sku 價格
+  weight: string // sku 重量
+  skuDesc: string // sku 描述
+  skuAttrValueList: skuAttrValue[] //sku 的平台屬性
+  skuSaleAttrValueList: skuSaleAttrValue[] // sku 銷售屬性
+  skuDefaultImg: string // 此 sku 圖片 url
+  isSale?: number
+  skuImageList?: skuImage[]
+}
+// 獲取 sku API ( 用在該 spu 的 sku 檢視 )
+export interface SkuInfoData extends ResponseData {
+  data: SkuData[]
 }

@@ -95,7 +95,7 @@
               placeholder="請你輸入屬性值"
               size="small"
               v-model="row.saleAttrValue"
-              @blur="unFocusedExecuted"
+              @blur="unFocusedExecuted(row)"
             />
             <el-button
               v-else
@@ -315,6 +315,8 @@ const toEditNewTag = (row: saleAttr) => {
 const unFocusedExecuted = (row: saleAttr) => {
   if (row) {
     const { baseSaleAttrId, saleAttrValue } = row
+    console.log('row', row)
+    console.log('saleAttrValue', saleAttrValue)
     const saleAttrValueName = saleAttrValue ? saleAttrValue.trim() : ''
     // 如果有空值或與現有 tag 內容有重複名稱的都不行
     if (!saleAttrValueName) {

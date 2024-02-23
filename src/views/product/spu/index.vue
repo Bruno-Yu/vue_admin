@@ -37,6 +37,7 @@
                 size="small"
                 icon="Plus"
                 title="添加SKU"
+                @click="addSku(row)"
               />
               <el-button
                 type="warning"
@@ -50,13 +51,19 @@
                 size="small"
                 icon="View"
                 title="查看SKU列表"
+                @click="openSkuList(row)"
               />
-              <el-button
-                type="danger"
-                size="small"
+              <el-popconfirm
+                :title="`您確定要刪掉 ${row.spuName} 嗎?`"
                 icon="Delete"
-                title="刪除SPU"
-              />
+                icon-color="#f56c6c"
+                width="250px"
+                @confirm="deleteSPU(row.id)"
+              >
+                <template #reference>
+                  <el-button type="danger" size="small" icon="Delete" />
+                </template>
+              </el-popconfirm>
             </template>
           </el-table-column>
         </el-table>
@@ -76,7 +83,24 @@
       <!-- 添加/修改 SPU -->
       <SpuForm ref="spuForm" v-show="scene === 1" @changeScene="changeScene" />
       <!-- 添加 SKU -->
-      <SkuForm v-show="scene === 2" />
+      <SkuForm ref="skuForm" v-show="scene === 2" @changeScene="changeScene" />
+      <!-- 展示選定 SPU 下所有的 SKU 數據 -->
+      <el-dialog title="SKU 列表" v-model="skuDialogVisible">
+        <el-table :data="currentSkuList" border>
+          <el-table-column prop="skuName" label="sku 名字" />
+          <el-table-column prop="price" label="sku 價格" />
+          <el-table-column prop="weight" label="sku 重量" />
+          <el-table-column label="sku 圖片">
+            <template #="{ row }">
+              <img
+                :src="row.skuDefaultImg"
+                :alt="`${row.skuName}'s image'`"
+                class="img-preview"
+              />
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-dialog>
     </el-card>
   </div>
 </template>
@@ -86,14 +110,17 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
+import { ref, watch, onBeforeUnmount } from 'vue'
+import { ElMessage } from 'element-plus' // element 中用來呈現 api 訊息的組件
 // 引入 category store
 import useCategoryStore from '@/store/modules/category'
-import { reqHasSpu } from '@/api/product/spu'
+import { reqHasSpu, reqSkuInfo, reqDeleteSpu } from '@/api/product/spu'
 import type {
   HasSpuResponseData,
   Records,
   SpuData,
+  SkuInfoData,
+  SkuData,
 } from '@/api/product/spu/type'
 // 引入sku spu 新增編輯組件
 import SkuForm from './skuForm.vue'
@@ -101,7 +128,7 @@ import SpuForm from './spuForm.vue'
 
 const categoryStore = useCategoryStore()
 
-// 定義 category 中的 scene ( 0:顯示已有的 SPU 數據; 1:添加或修改 SPU; 3: 添加 SKU  )
+// 定義 category 中的 scene ( 0:顯示已有的 SPU 數據; 1:添加或修改 SPU; 2: 添加 SKU  )
 const scene = ref<number>(0)
 // 分頁器
 const pageNo = ref<number>(1)
@@ -113,6 +140,26 @@ const recordsData = ref<Records>([])
 const total = ref<number>(0)
 // 獲取子組件 spuForm
 const spuForm = ref()
+
+// 獲取子組件 sluForm
+const skuForm = ref()
+// 在該 SPU 下新增 SKU
+const addSku = (row: SpuData) => {
+  scene.value = 2
+  skuForm.value.initSkuData(categoryStore.c1Id, categoryStore.c2Id, row)
+}
+// 存取目前 SPU 所檢視的所有 sku
+const currentSkuList = ref<SkuData[]>([])
+// 控制 SKU 列表 Dialogue
+const skuDialogVisible = ref<boolean>(false)
+// 檢視該 spu 下的 sku
+const openSkuList = async (row: SpuData) => {
+  const reqSkuInfoResult: SkuInfoData = await reqSkuInfo(row.id as number)
+  if (reqSkuInfoResult.code === 200) {
+    currentSkuList.value = reqSkuInfoResult.data
+    skuDialogVisible.value = true
+  }
+}
 
 //  scene 轉換到新增或編輯 SPU 頁面
 const addOrEditSPUScene = (
@@ -127,6 +174,25 @@ const addOrEditSPUScene = (
   } else {
     // 新增則不傳入已有的資料 row 但要傳入 c3Id
     spuForm.value.initHasSpuData(undefined, categoryStore.c3Id)
+  }
+}
+
+// 刪除 SPU
+const deleteSPU = async (spuId: string | number) => {
+  const deleResult = await reqDeleteSpu(spuId)
+  if (deleResult.code === 200) {
+    ElMessage({
+      type: 'success',
+      message: '刪除成功',
+    })
+    await getHasSpu(
+      recordsData.value.length > 1 ? pageNo.value : pageNo.value - 1,
+    )
+  } else {
+    ElMessage({
+      type: 'error',
+      message: '刪除失敗',
+    })
   }
 }
 
@@ -174,6 +240,10 @@ const getHasSpu = async (page = 1) => {
 const changeSize = () => {
   getHasSpu()
 }
+// 離開時清空 store 中的數據
+onBeforeUnmount(() => {
+  categoryStore.$reset()
+})
 </script>
 <style lang="scss" scoped>
 .table-card {
@@ -182,5 +252,10 @@ const changeSize = () => {
 
 .tag {
   margin: 5px;
+}
+
+.img-preview {
+  height: 100%;
+  width: 100%;
 }
 </style>

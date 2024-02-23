@@ -29,6 +29,7 @@ export interface AttrData {
   categoryId: number | string
   categoryLevel: number | string
   attrValueList: AttrValueData[]
+  attrIdAndValueId?: string | undefined // 用於在 SPU/skuForm 存取個別屬性所選擇的值
 }
 
 export interface AttrResponseData extends ResponseData {
