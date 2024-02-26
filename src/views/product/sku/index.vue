@@ -34,8 +34,23 @@
             @click="skuOnAndOffSale(row)"
           />
           <el-button type="primary" size="small" icon="Edit" @click="isEdit" />
-          <el-button type="info" size="small" icon="InfoFilled" />
-          <el-button type="danger" size="small" icon="Delete" />
+          <el-button
+            type="info"
+            size="small"
+            icon="InfoFilled"
+            @click="showDetail(row)"
+          />
+          <el-popconfirm
+            :title="`您確定要刪掉 ${row.skuName} 嗎?`"
+            icon="Delete"
+            icon-color="#f56c6c"
+            width="250px"
+            @confirm="deleteSKU(row.id)"
+          >
+            <template #reference>
+              <el-button type="danger" size="small" icon="Delete" />
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -49,13 +64,86 @@
       @current-change="getHasSku"
       @size-change="changePaginationSize"
     />
+    <!-- 展示商品詳情 -->
+    <!-- 
+      el-drawer 
+      v-model 與 el-dialog 一樣控制 drawer 的展示與否
+      direction drawer 出現的方向，默認是 rtl
+
+    -->
+    <el-drawer v-model="isDrawerVisible">
+      <template #header>
+        <h4>查看商品詳情</h4>
+      </template>
+      <template #default>
+        <el-row class="table">
+          <el-col :span="6">名稱</el-col>
+          <el-col :span="18">{{ skuDemoData.skuName }}</el-col>
+        </el-row>
+        <el-row class="table">
+          <el-col :span="6">描述</el-col>
+          <el-col :span="18">{{ skuDemoData.skuDesc }}</el-col>
+        </el-row>
+        <el-row class="table">
+          <el-col :span="6">價格</el-col>
+          <el-col :span="18">{{ skuDemoData.price }}</el-col>
+        </el-row>
+        <el-row class="table">
+          <el-col :span="6">平台屬性</el-col>
+          <el-col :span="18">
+            <el-tag
+              class="tag"
+              v-for="tag in skuDemoData.skuAttrValueList"
+              :key="tag.attrId"
+            >
+              {{ tag.attrName }}
+            </el-tag>
+          </el-col>
+        </el-row>
+        <el-row class="table">
+          <el-col :span="6">銷售屬性</el-col>
+          <el-col :span="18">
+            <el-tag
+              class="tag"
+              v-for="tag in skuDemoData.skuSaleAttrValueList"
+              :key="tag.saleAttrValueId"
+            >
+              {{ tag.saleAttrValueName }}
+            </el-tag>
+          </el-col>
+        </el-row>
+        <el-row class="table">
+          <el-col :span="6">商品圖片</el-col>
+          <el-col :span="18">
+            <!-- 圖片 -->
+            <el-carousel :interval="4000" type="card" height="200px">
+              <el-carousel-item
+                v-for="tag in skuDemoData.skuImageList"
+                :key="tag.id"
+              >
+                <img class="sku-img" :src="tag.imgUrl" :alt="tag.imgName" />
+              </el-carousel-item>
+            </el-carousel>
+          </el-col>
+        </el-row>
+      </template>
+    </el-drawer>
   </el-card>
 </template>
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 import { ElMessage } from 'element-plus' // element 中用來呈現 api 訊息的組件
-import { reqSkuList, reqSkuOnAndOffSale } from '@/api/product/sku'
-import type { SkuResponseData, SkuData } from '@/api/product/sku/type'
+import {
+  reqSkuList,
+  reqSkuOnAndOffSale,
+  reqShowSku,
+  reqDeleteSku,
+} from '@/api/product/sku'
+import type {
+  SkuResponseData,
+  SkuData,
+  SkuShowResponseData,
+} from '@/api/product/sku/type'
 const skuListData = ref<SkuData[]>([])
 // 分頁器
 const pageNo = ref<number>(1)
@@ -109,6 +197,54 @@ const isEdit = () => {
   })
 }
 
+// 商品檢視
+// 商品檢視資料
+const skuDemoData = ref<SkuData>({
+  id: 0,
+  category3Id: '', // 三級分類 id
+  spuId: '', // 該 spu Id
+  tmId: '', // 該 spu 的品牌 id
+  skuName: '', // sku 名稱
+  price: '', // sku 價格
+  weight: '', // sku 重量
+  skuDesc: '', // sku 描述
+  skuAttrValueList: [], //sku 的平台屬性
+  skuSaleAttrValueList: [], // sku 銷售屬性
+  skuDefaultImg: '', // 此 sku 圖片 url
+  isSale: 0, //  0: 下架; 1: 上架
+  skuImageList: [],
+})
+// 商品檢視頁面的呈現與否
+const isDrawerVisible = ref<boolean>(false)
+// 按鈕方法
+const showDetail = async (row: SkuData) => {
+  isDrawerVisible.value = true
+  const resultReqShowSku: SkuShowResponseData = await reqShowSku(
+    row.id as number,
+  )
+  if (resultReqShowSku.code === 200) {
+    skuDemoData.value = resultReqShowSku.data
+  }
+}
+// 刪除 SKU
+const deleteSKU = async (skuId: number) => {
+  const result = reqDeleteSku(skuId)
+  if (result.code === 200) {
+    ElMessage({
+      type: 'success',
+      message: '刪除成功',
+    })
+    await getHasSku(
+      skuListData.value.length > 1 ? pageNo.value : pageNo.value - 1,
+    )
+  } else {
+    ElMessage({
+      type: 'error',
+      message: '系統數據不能刪除',
+    })
+  }
+}
+
 // 分頁器下拉菜單
 const changePaginationSize = async (size: number) => {
   pageSize.value = size // 基本上不加這行 pagSize 也會改變
@@ -126,5 +262,25 @@ onMounted(async () => {
 .sku-img {
   width: 100%;
   height: 100%;
+}
+.tag {
+  margin: 5px;
+}
+
+// 輪播
+.el-carousel__item h3 {
+  color: #475669;
+  font-size: 14px;
+  opacity: 0.75;
+  line-height: 200px;
+  margin: 0;
+}
+
+.el-carousel__item:nth-child(2n) {
+  background-color: #99a9bf;
+}
+
+.el-carousel__item:nth-child(2n + 1) {
+  background-color: #d3dce6;
 }
 </style>

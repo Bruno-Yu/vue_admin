@@ -66,3 +66,8 @@ export interface SkuResponseData extends ResponseData {
     pages: number // 共用幾頁
   }
 }
+
+// 展示 SKU API
+export interface SkuShowResponseData extends ResponseData {
+  data: SkuData
+}
