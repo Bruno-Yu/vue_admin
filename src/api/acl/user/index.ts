@@ -25,8 +25,14 @@ enum API {
 }
 
 // 取得全部使用者的資料
-export const reqUsersData = (page: number, limit: number) =>
-  request.get<any, UsersDataResponse>(API.USERSDATA_URL + `${page}/${limit}`)
+export const reqUsersData = (
+  page: number,
+  limit: number,
+  username: string = '',
+) =>
+  request.get<any, UsersDataResponse>(
+    API.USERSDATA_URL + `${page}/${limit}?username=${username}`,
+  )
 // 新增用戶
 export const reqAddUser = (data: UserData) =>
   request.post<any, any>(API.ADDUSER_URL, data)

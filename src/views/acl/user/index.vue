@@ -2,11 +2,17 @@
   <el-card>
     <el-form :inline="true" class="d-flex justify-between">
       <el-form-item label="用戶名:" class="mb-0">
-        <el-input placeholder="請輸入用戶名" />
+        <el-input v-model="userInput" placeholder="請輸入用戶名" />
       </el-form-item>
       <el-form-item class="mb-0">
-        <el-button type="primary">搜索</el-button>
-        <el-button type="secondary" class="btn">重置</el-button>
+        <el-button
+          type="primary"
+          :disabled="!userInput.trim()"
+          @click="searchUserName"
+        >
+          搜索
+        </el-button>
+        <el-button type="secondary" class="btn" @click="reset">重置</el-button>
       </el-form-item>
     </el-form>
   </el-card>
@@ -174,6 +180,7 @@
   </el-card>
 </template>
 <script lang="ts" setup>
+import useLayoutSettingStore from '@/store/modules/setting'
 import { ref, onMounted, computed, nextTick } from 'vue'
 import { ElMessage } from 'element-plus'
 import {
@@ -192,6 +199,10 @@ import type {
   UserRoleData,
   ResponseData,
 } from '@/api/acl/user/type'
+
+// 獲取 setting store instance
+const settingStore = useLayoutSettingStore()
+
 // 分頁器
 const pageNo = ref<number>(1)
 // 每頁幾筆數據
@@ -204,13 +215,31 @@ const usersData = ref<UserData[]>([])
 const changePaginationSize = async () => {
   await getUsersData()
 }
+// 用戶名存取
+const userInput = ref<string>('')
+// 重置按鈕功能
+const reset = () => {
+  settingStore.refresh = !settingStore.refresh
+}
+
+const searchUserName = async () => {
+  if (!userInput.value.trim()) {
+    ElMessage({
+      type: 'error',
+      message: '搜尋欄不得為空',
+    })
+  } else {
+    await getUsersData(1, userInput.value)
+  }
+}
 
 // 獲取所有 user API
-const getUsersData = async (page: number = 1) => {
+const getUsersData = async (page: number = 1, username: string = '') => {
   pageNo.value = page
   const reqUsersDataResult: UsersDataResponse = await reqUsersData(
     pageNo.value,
     pageSize.value,
+    username,
   )
   if (reqUsersDataResult.code === 200) {
     const { records, total: apiTotal } = reqUsersDataResult.data
