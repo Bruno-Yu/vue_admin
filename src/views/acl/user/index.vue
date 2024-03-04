@@ -17,7 +17,7 @@
     </el-form>
   </el-card>
   <el-card class="table">
-    <el-button type="primary" @click="showAddOrEditUserDrawer">
+    <el-button type="primary" icon="Plus" @click="showAddOrEditUserDrawer">
       添加用戶
     </el-button>
     <el-button
@@ -207,7 +207,7 @@ const settingStore = useLayoutSettingStore()
 const pageNo = ref<number>(1)
 // 每頁幾筆數據
 const pageSize = ref<number>(5)
-// sku total number
+// user total number
 const total = ref<number>(0)
 // 存取此頁所有 userData
 const usersData = ref<UserData[]>([])
