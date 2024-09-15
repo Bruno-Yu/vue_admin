@@ -6,7 +6,7 @@ import { constantRoute } from './routes'
 // 創建路由器
 const router = createRouter({
   // 路由模式 hash 或是 history
-  history: createWebHashHistory(),
+  history: createWebHashHistory('/vue_admin/'),
   routes: constantRoute,
   // 滾動行為
   scrollBehavior() {

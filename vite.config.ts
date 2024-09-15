@@ -17,6 +17,7 @@ export default defineConfig(({ command, mode }) => {
   // proxy 路徑的 rewrite 正則變數
   const proxyReWriteRegex = new RegExp(`^${env.VITE_APP_BASE_API}`)
   return {
+    base: '/vue_admin/',
     plugins: [
       vue(),
       createSvgIconsPlugin({
