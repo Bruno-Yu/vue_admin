@@ -14,6 +14,7 @@ export default defineConfig(({ command, mode }) => {
   // loadEnv 有 2 個參數，參數1:目前模式; 參數2: 環境變數位置
   // 若要位置，我們必須提供代表根目錄的 vite api 'process.cwd()' ( https://vitejs.dev/config/shared-options.html#root )
   const env = loadEnv(mode, process.cwd())
+  const isDev = command === 'serve'
   // proxy 路徑的 rewrite 正則變數
   const proxyReWriteRegex = new RegExp(`^${env.VITE_APP_BASE_API}`)
   return {
@@ -42,15 +43,17 @@ export default defineConfig(({ command, mode }) => {
       },
     },
     // proxy 代理跨域 ( vite 介紹網址: https://vitejs.dev/config/server-options.html#server-proxy )
-    server: {
-      proxy: {
-        // vue.config 取 env 的方式
-        [env.VITE_APP_BASE_API]: {
-          target: env.VITE_SERVER, // server 路徑位置
-          changeOrigin: true, //需要代理跨域
-          rewrite: (path) => path.replace(proxyReWriteRegex, ''), // 路徑重寫
-        },
-      },
-    },
+    server: isDev
+      ? {
+          proxy: {
+            // vue.config 取 env 的方式
+            [env.VITE_APP_BASE_API]: {
+              target: env.VITE_SERVER, // server 路徑位置
+              changeOrigin: true, //需要代理跨域
+              rewrite: (path) => path.replace(proxyReWriteRegex, ''), // 路徑重寫
+            },
+          },
+        }
+      : undefined,
   }
 })
